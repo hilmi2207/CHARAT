@@ -9,3 +9,4 @@ ordereddict==1.1
 portalocker==2.4.0
 psycopg2-binary==2.9.3
 Werkzeug==2.0.3
+tensorflow-cpu==2.8.0
