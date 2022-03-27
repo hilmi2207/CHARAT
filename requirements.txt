@@ -8,5 +8,4 @@ MarkupSafe==2.1.1
 ordereddict==1.1
 portalocker==2.4.0
 psycopg2-binary==2.9.3
-pywin32==303
 Werkzeug==2.0.3
