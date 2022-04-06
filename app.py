@@ -32,7 +32,7 @@ for answer in answers:
         else:
             word2count[word] += 1
 
-threshold = 2
+threshold = 0
 
 vocab = {}
 word_num = 0
@@ -73,7 +73,7 @@ for line in answers:
             lst.append(vocab[word])        
     decoder_inp.append(lst)
     
-max_input_len = 1000
+max_input_len = 262
 lstm_layers = 1000
 VOCAB_SIZE = len(vocab)
 
@@ -94,7 +94,7 @@ embedding = Embedding(VOCAB_SIZE + 1,
                       trainable = True,
                       mask_zero = True 
                       )
-e_input = Input(shape=(1000, ))
+e_input = Input(shape=(max_input_len, ))
 e_embeded = embedding(e_input)
 e_lstm = LSTM(lstm_layers, return_sequences=True, return_state=True)
 e_op, h_state, c_state = e_lstm(e_embeded)

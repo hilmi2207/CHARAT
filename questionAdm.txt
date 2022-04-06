@@ -74,4 +74,39 @@ surat penghapusan mata kuliah
 surat perbaikan mk
 surat perbaikan nilai
 surat perbaikan mk dan nilai
-usulan prosedur penununjukkan pembimbing KP
+usulan prosedur penunjukkan pembimbing KP
+berita acara seminar kp
+lembar pengesahan
+rekomendasi pembimbing kp
+surat izin survey penelitian mahasiswa
+surat kp ke wadek 1
+surat pengantar aktif kuliah
+surat penghapusan mk dan sunting mk di KHS
+surat rekomendasi msib
+berita acara kp
+pengesahan
+rekomendasi pembimbing kuliah praktik
+surat izin survey penelitian
+surat kuliah praktik ke wadek 1
+surat aktif kuliah
+sunting mk di KHS
+surat rekomendasi magang bersertifikat
+berita acara seminar kuliah praktik
+izin survey penelitian mahasiswa
+surat kp wadek 1
+pengantar aktif kuliah
+surat penghapusan mata kuliah dan sunting mata kuliah di KHS
+surat rekomendasi studi independen bersertifikat
+berita acara kuliah praktik
+izin survey penelitian
+surat kuliah praktik wadek 1
+aktif kuliah
+surat penghapusan mata kuliah dan sunting mata kuliah
+surat rekomendasi studi independen
+berita acara kp
+surat kuliah praktik wadek 1
+surat penghapusan mata kuliah dan sunting mata kuliah
+surat rekomendasi magang
+surat penghapusan mata kuliah
+surat rekomendasi sib
+sunting mata kuliah
