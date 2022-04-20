@@ -11,14 +11,33 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import re
 app = Flask(__name__)
 
-question = pd.read_csv("questionAdm.txt", names=['question'])
-answer = pd.read_csv("answerAdm.txt", names=['answer'])
+df = pd.read_csv('Dataset.csv', delimiter=";")
+questions = df.Question.values
+answers = df.Answer.values
 
-questions = question['question'].values
-answers = answer['answer'].values
+import re
+def clean_text(text):
+    text = text.lower().strip()
+    text = re.sub(r'" - "+', "", text)
+    text = re.sub(r'" +"', " ", text)
+    text = re.sub(r'"^ "', "", text)
+    text = re.sub(r'[-()\"#/@;:<>{}`+=~|.!?,]', "", text)
+    text = re.sub(r'[\-\-]', "", text)
+    text = re.sub(r'\.\.\.', "", text)
+    text = re.sub(r'^- ', "", text)
+    return text
+
+clean_questions = []
+for question in questions:
+    clean_questions.append(clean_text(question))
+    
+#clean_answers = []
+#for answer in answers:
+#    clean_answers.append(clean_text(answer))
+
 
 word2count = {}
-for question in questions:
+for question in clean_questions:
     for word in question.split():
         if word not in word2count:
             word2count[word] = 1
@@ -32,19 +51,20 @@ for answer in answers:
         else:
             word2count[word] += 1
 
-threshold = 0
+print(len(word2count))
 
 vocab = {}
 word_num = 0
 for word, count in word2count.items():
-    if count >= threshold:
         vocab[word] = word_num
         word_num += 1
+
+print(len(vocab))
 
 for i in range(len(answers)):
     answers[i] = '<SOS> ' + answers[i] + ' <EOS>'
 
-tokens = ['<PAD>', '<EOS>', '<OUT>', '<SOS>']
+tokens = ['<EOS>', '<SOS>']
 x = len(vocab)
 for token in tokens:
     vocab[token] = x
@@ -53,28 +73,21 @@ for token in tokens:
 inv_vocab = {w:v for v, w in vocab.items()}
 
 encoder_inp = []
-for line in questions:
+for line in clean_questions:
     lst = []
     for word in line.split():
-        if word not in vocab:
-            lst.append(vocab['<OUT>'])
-        else:
-            lst.append(vocab[word])
+        lst.append(vocab[word])
         
     encoder_inp.append(lst)
-
 decoder_inp = []
 for line in answers:
     lst = []
-    for word in line.split():
-        if word not in vocab:
-            lst.append(vocab['<OUT>'])
-        else:
-            lst.append(vocab[word])        
+    for word in line.split():      
+      lst.append(vocab[word])        
     decoder_inp.append(lst)
-    
-max_input_len = 262
-lstm_layers = 1000
+        
+max_input_len = 261
+lstm_layers = 256
 VOCAB_SIZE = len(vocab)
 
 encoder_inp = pad_sequences(encoder_inp, maxlen = max_input_len, padding='post', truncating='post')
@@ -86,10 +99,9 @@ for i in decoder_inp:
 
 decoder_final_output = pad_sequences(decoder_final_output, maxlen = max_input_len, padding='post', truncating='post')
 decoder_final_output = to_categorical(decoder_final_output, VOCAB_SIZE)
-decoder_final_output
 
 embedding = Embedding(VOCAB_SIZE + 1,
-                      output_dim = 1000, 
+                      output_dim = 128, 
                       input_length = max_input_len,
                       trainable = True,
                       mask_zero = True 
@@ -134,7 +146,7 @@ enc_model.load_weights('enc_model.h5')
 dec_model.load_weights('dec_model.h5')
 model.load_weights('main_model.h5')
 def input_sentence(text):
-    user_ = text
+    user_ = clean_text(text)
     user = [user_]
 
     inp_sentence = []
@@ -196,6 +208,7 @@ def predict():
             target_seq = np.zeros((1 , 1))  
             target_seq[0 , 0] = word_index
             states_value = [h, c]
+            
         message = {"answer": decoded}    
         return jsonify(message)
 
