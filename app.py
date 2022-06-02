@@ -153,10 +153,9 @@ def input_sentence(text):
     for sentence in user:
         lst = []
         for y in sentence.split():
-            try:
+            
                 lst.append(vocab[y])
-            except:
-                lst.append(vocab['<OUT>'])
+            
         inp_sentence.append(lst)
     
     inputs_sentence = pad_sequences(inp_sentence, max_input_len, padding='post')
@@ -178,15 +177,28 @@ def predict():
     
     userText = request.get_json().get('message')
     #model = "main_model.h5"
+    
+    
 
     while userText != 'quit':
         
-        target_seq, states_value = input_sentence(userText)
+        
+        
 
         stop_condition = False
-        decoded = ''
+        for y in userText.split():
+            if y not in vocab:
+                decoded = "Maaf, saya tidak memahami maksud anda."
+                
+                stop_condition = True
+                break
+            else:
+                continue
+        
 
         while not stop_condition :
+            target_seq, states_value = input_sentence(userText)
+            decoded = ''
             output_tokens , h, c= dec_model.predict([target_seq] + states_value )
             input_tokens = d_dense(output_tokens)
             word_index = np.argmax(input_tokens[0, -1, :])
